@@ -5,8 +5,6 @@ import { createAppConfig } from './config/app-config.js';
 import { loadEnv } from './config/env.js';
 import { buildWebCommand } from './cli/build-web.js';
 import { previewCommand } from './cli/preview.js';
-import { pushCommand } from './cli/push.js';
-import { scheduleCommand } from './cli/schedule.js';
 import { validateCommand } from './cli/validate.js';
 import { webCommand } from './cli/web.js';
 
@@ -18,8 +16,6 @@ async function main(): Promise<void> {
   program.name('ai-article-daily').description('Daily AI article curation and push project');
 
   program.command('preview').action(async () => previewCommand(config));
-  program.command('push').action(async () => pushCommand(config));
-  program.command('schedule').action(async () => scheduleCommand(config));
   program.command('validate').action(async () => validateCommand(config));
   program.command('build-web').action(async () => buildWebCommand(config));
   program.command('web').action(async () => webCommand(config));

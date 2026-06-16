@@ -2,6 +2,14 @@
 
 一个基于高质量 AI 来源做每日精选和公开展示的项目。
 
+## 产品定位
+这是一个 **web-first** 的每日 AI 内容精选站点，不把飞书或机器人推送作为核心输出。
+
+当前的主路径是：
+- 抓取高质量来源
+- 做推荐与去重
+- 公开网页展示与归档
+
 ## MVP 目标
 - 接入 3~5 个高质量官方 AI 文章来源
 - 统一归一化成 Article 模型
@@ -18,12 +26,13 @@
 npm install
 npm run validate
 npm run preview
-npm run push
 npm run web
 npm run build:web
 npm run build
 npm test
 ```
+
+> 说明：这里的 `preview` 更像“生成今日网页推荐内容”，而不是飞书推送预览。
 
 ## 当前状态
 这是第一版项目骨架，已经包含：
@@ -55,3 +64,5 @@ npm test
 1. 增强文章质量与过滤规则
 2. 优化网页样式与筛选体验
 3. 推到 GitHub 并启用 GitHub Pages
+4. 继续丰富 archive / detail 的浏览体验
+5. 保持项目专注于 web-first 展示，而不是回头扩充飞书链路

@@ -12,14 +12,6 @@ export type AppConfig = {
     daysToAvoidRepeat: number;
     maxDailyRecommendations: number;
   };
-  channels: {
-    feishu: {
-      enabled: boolean;
-      webhookUrl: string;
-      botSecret?: string;
-      requiredKeyword?: string;
-    };
-  };
   sources: {
     openaiRss: string;
     huggingFaceRss: string;

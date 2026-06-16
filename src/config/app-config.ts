@@ -18,14 +18,6 @@ export function createAppConfig(env: EnvConfig, cwd: string = process.cwd()): Ap
       daysToAvoidRepeat: env.DAYS_TO_AVOID_REPEAT,
       maxDailyRecommendations: env.MAX_DAILY_RECOMMENDATIONS,
     },
-    channels: {
-      feishu: {
-        enabled: env.FEISHU_ENABLED,
-        webhookUrl: env.FEISHU_WEBHOOK_URL,
-        botSecret: env.FEISHU_BOT_SECRET,
-        requiredKeyword: env.FEISHU_REQUIRED_KEYWORD,
-      },
-    },
     sources: {
       openaiRss: env.ARTICLE_SOURCE_OPENAI_RSS,
       huggingFaceRss: env.ARTICLE_SOURCE_HF_RSS,
