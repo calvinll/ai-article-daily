@@ -1,0 +1,66 @@
+name: Deploy article showcase to GitHub Pages
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      APP_ENV: production
+      APP_TIMEZONE: Asia/Shanghai
+      WEB_PORT: 4273
+      DATA_DIR: ./data
+      DAILY_PUSH_CRON: 5 9 * * *
+      FEISHU_ENABLED: false
+      FEISHU_WEBHOOK_URL: https://open.feishu.cn/open-apis/bot/v2/hook/replace-me
+      DAYS_TO_AVOID_REPEAT: 7
+      MAX_DAILY_RECOMMENDATIONS: 3
+      ARTICLE_SOURCE_OPENAI_RSS: https://openai.com/news/rss.xml
+      ARTICLE_SOURCE_HF_RSS: https://huggingface.co/blog/feed.xml
+      ARTICLE_SOURCE_GOOGLE_AI_RSS: https://blog.google/technology/ai/rss/
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build static site
+        run: npm run build:web
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist-web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
