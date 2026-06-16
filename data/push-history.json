@@ -1,0 +1,32 @@
+[
+  {
+    "id": "1781592385371",
+    "date": "2026-06-16",
+    "articleId": "claude-code-docs-61",
+    "title": "Set up Claude Code for your organization",
+    "sourceName": "Claude Code Docs",
+    "channel": "feishu",
+    "status": "success",
+    "createdAt": "2026-06-16T06:46:25.410Z"
+  },
+  {
+    "id": "1781592667582",
+    "date": "2026-06-16",
+    "articleId": "openai-2",
+    "title": "New OpenAI Academy courses for the next era of work",
+    "sourceName": "OpenAI",
+    "channel": "feishu",
+    "status": "success",
+    "createdAt": "2026-06-16T06:51:07.600Z"
+  },
+  {
+    "id": "1781593493724",
+    "date": "2026-06-16",
+    "articleId": "openai-9",
+    "title": "PRC-linked influence operations are targeting AI debates in the US",
+    "sourceName": "OpenAI",
+    "channel": "feishu",
+    "status": "success",
+    "createdAt": "2026-06-16T07:04:53.740Z"
+  }
+]
