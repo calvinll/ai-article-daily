@@ -94,6 +94,28 @@ function renderSpotlight(items, todayId) {
   if (empty) empty.hidden = spotlight.length > 0;
 }
 
+function renderSpotlight(items, todayId) {
+  const el = document.getElementById('spotlight-list');
+  const empty = document.getElementById('spotlight-empty');
+  if (!el) return;
+
+  const spotlight = items
+    .filter((item) => item.id !== todayId)
+    .filter((item) => item.isOfficial || item.isNoteworthy || item.isRecent)
+    .slice(0, 4);
+
+  el.innerHTML = spotlight.map((item) => `
+    <article class="mini-card">
+      <h3>${item.title}</h3>
+      <p class="meta">${item.sourceName}</p>
+      <p class="lead">${item.summary}</p>
+      <p class="link-row"><a href="./article.html?id=${encodeURIComponent(item.id)}">查看详情 →</a></p>
+    </article>
+  `).join('');
+
+  if (empty) empty.hidden = spotlight.length > 0;
+}
+
 function renderArticleList(items) {
   const el = document.getElementById('article-list');
   const count = document.getElementById('article-result-count');
