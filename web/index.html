@@ -17,9 +17,18 @@
           <a href="./archive.html">历史归档</a>
         </nav>
       </header>
-      <section class="hero-card">
-        <h2>今日推荐</h2>
-        <article id="today-article" class="card card-featured"></article>
+      <section class="hero-card hero-grid">
+        <article class="card card-featured">
+          <h2>今日推荐</h2>
+          <div id="today-article"></div>
+        </article>
+        <aside class="card spotlight-card">
+          <span class="eyebrow">Spotlight</span>
+          <h2>近期值得关注</h2>
+          <p class="meta">优先展示近期、官方、值得优先阅读的内容。</p>
+          <div id="spotlight-list" class="list compact-list"></div>
+          <p id="spotlight-empty" class="empty-state" hidden>当前没有额外的近期重点内容。</p>
+        </aside>
       </section>
       <section>
         <div class="section-heading">

@@ -47,6 +47,25 @@ function renderToday(article) {
   `;
 }
 
+function renderSpotlight(items, todayId) {
+  const el = document.getElementById('spotlight-list');
+  const empty = document.getElementById('spotlight-empty');
+  if (!el) return;
+  const spotlight = items
+    .filter((item) => item.id !== todayId)
+    .filter((item) => item.isOfficial || item.isNoteworthy || item.isRecent)
+    .slice(0, 4);
+
+  el.innerHTML = spotlight.map((item) => `
+    <article class="mini-card">
+      <h3>${item.title}</h3>
+      <p class="meta">${item.sourceName}</p>
+      <p><a href="./article.html?id=${encodeURIComponent(item.id)}">查看详情 →</a></p>
+    </article>
+  `).join('');
+  if (empty) empty.hidden = spotlight.length > 0;
+}
+
 function renderArticleList(items) {
   const el = document.getElementById('article-list');
   const count = document.getElementById('article-result-count');
@@ -68,18 +87,39 @@ function renderArticleList(items) {
   if (empty) empty.hidden = items.length > 0;
 }
 
+function groupHistoryByDate(items) {
+  const groups = new Map();
+  for (const item of items) {
+    const group = groups.get(item.date) ?? [];
+    group.push(item);
+    groups.set(item.date, group);
+  }
+  return Array.from(groups.entries());
+}
+
 function renderHistory(items) {
   const el = document.getElementById('history-list');
   const count = document.getElementById('history-result-count');
   const empty = document.getElementById('history-empty');
   if (!el) return;
-  el.innerHTML = items.map((item) => `
-    <article class="card">
-      <h2>${item.title}</h2>
-      <p class="meta">${item.date} · ${item.sourceName} · ${item.status}</p>
-      <div class="badge-group">${item.themes.map((theme) => badge(theme)).join('')}</div>
-      <p class="link-row"><a href="./article.html?id=${encodeURIComponent(item.articleId)}">查看详情 →</a></p>
-    </article>
+  const groups = groupHistoryByDate(items);
+  el.innerHTML = groups.map(([date, entries]) => `
+    <section class="archive-group">
+      <div class="section-heading">
+        <span class="eyebrow">Archive</span>
+        <h2>${date}</h2>
+      </div>
+      <div class="list compact-list">
+        ${entries.map((item) => `
+          <article class="card">
+            <h3>${item.title}</h3>
+            <p class="meta">${item.sourceName} · ${item.status}</p>
+            <div class="badge-group">${item.themes.map((theme) => badge(theme)).join('')}</div>
+            <p class="link-row"><a href="./article.html?id=${encodeURIComponent(item.articleId)}">查看详情 →</a></p>
+          </article>
+        `).join('')}
+      </div>
+    </section>
   `).join('');
   if (count) count.textContent = `筛选后 ${items.length} 条历史记录`;
   if (empty) empty.hidden = items.length > 0;
@@ -93,14 +133,39 @@ function renderDetail(detail) {
     return;
   }
   el.innerHTML = `
-    <h2>${detail.title}</h2>
+    <div class="card-header">
+      <div>
+        <p class="eyebrow">Article detail</p>
+        <h2>${detail.title}</h2>
+      </div>
+      <div class="badge-group">
+        ${detail.themes.map((theme) => badge(theme)).join('')}
+        ${detail.isOfficial ? badge('官方来源') : ''}
+        ${detail.isRecent ? badge('近期') : ''}
+        ${detail.isNoteworthy ? badge('值得关注') : ''}
+      </div>
+    </div>
     <p class="meta">来源：${detail.sourceName} · 类型：${detail.sourceType}</p>
-    <div class="badge-group">${detail.themes.map((theme) => badge(theme)).join('')}</div>
-    <p>${detail.summary}</p>
-    <p><strong>为什么推荐：</strong>${detail.whyRecommended}</p>
-    <p><strong>标签：</strong>${detail.tags.join(' / ') || '暂无'}</p>
-    <p><strong>发布时间：</strong>${detail.publishedAt ?? '未知'}</p>
-    <p><a href="${detail.canonicalUrl}" target="_blank" rel="noreferrer">查看原文 →</a></p>
+    <p class="lead">${detail.summary}</p>
+    <section class="section-block">
+      <h3>为什么推荐</h3>
+      <p>${detail.whyRecommended}</p>
+    </section>
+    <section class="section-block split-grid">
+      <div>
+        <h3>主题</h3>
+        <div class="badge-group">${detail.themes.map((theme) => badge(theme)).join('')}</div>
+      </div>
+      <div>
+        <h3>标签</h3>
+        <p class="meta">${detail.tags.join(' / ') || '暂无'}</p>
+      </div>
+    </section>
+    <section class="section-block">
+      <h3>更多信息</h3>
+      <p class="meta">发布时间：${detail.publishedAt ?? '未知'}</p>
+      <p class="link-row"><a href="${detail.canonicalUrl}" target="_blank" rel="noreferrer">查看原文 →</a></p>
+    </section>
   `;
 }
 
@@ -146,10 +211,10 @@ function bindArticleFilters(items) {
     renderArticleList(filtered);
   };
 
-    search?.addEventListener('input', rerender);
-    theme?.addEventListener('change', rerender);
-    source?.addEventListener('change', rerender);
-    rerender();
+  search?.addEventListener('input', rerender);
+  theme?.addEventListener('change', rerender);
+  source?.addEventListener('change', rerender);
+  rerender();
 }
 
 function bindHistoryFilters(items) {
@@ -201,6 +266,7 @@ if (path.endsWith('/article.html')) {
     fetchJson('./data/articles.json'),
   ]).then(([today, articles]) => {
     renderToday(today);
+    renderSpotlight(articles, today?.id);
     bindArticleFilters(articles);
   }).catch(console.error);
 }
