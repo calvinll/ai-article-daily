@@ -1,4 +1,5 @@
 import { getIsoTimestamp } from '../utils/date.js';
+import { createStableId } from '../utils/hash.js';
 import type { ArticleSeed } from './types.js';
 
 function extractItems(xml: string): string[] {
@@ -108,7 +109,7 @@ export async function fetchRssSource(url: string, sourceName: string): Promise<A
     const suppressed = shouldSuppress(title, summary);
 
     return {
-      id: `${sourceName.toLowerCase().replace(/\s+/g, '-')}-${index + 1}`,
+      id: createStableId(canonicalUrl, sourceName.toLowerCase().replace(/\s+/g, '-')),
       title,
       summary,
       canonicalUrl,

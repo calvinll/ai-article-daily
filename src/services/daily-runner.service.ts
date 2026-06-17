@@ -9,7 +9,7 @@ import type { AppConfig } from '../types/app-config.js';
 import type { PushRecord } from '../types/push-record.js';
 import { getIsoTimestamp, getLocalDateKey } from '../utils/date.js';
 
-export async function runDailyArticleFlow(config: AppConfig) {
+export async function runDailyArticleFlow(config: AppConfig, options: { persistHistory?: boolean } = {}) {
   const articleRepository = new ArticleRepository(config.app.dataDir);
   const historyRepository = new HistoryRepository(config.app.dataDir);
 
@@ -19,10 +19,15 @@ export async function runDailyArticleFlow(config: AppConfig) {
   await articleRepository.saveAll(deduped);
 
   const history = await historyRepository.getAll();
-  const selected = selectDailyArticles(deduped, history, config.recommendation.maxDailyRecommendations);
+  const selected = selectDailyArticles(
+    deduped,
+    history,
+    config.recommendation.maxDailyRecommendations,
+    config.recommendation.daysToAvoidRepeat,
+  );
   const content = createDailyArticleContent(selected);
 
-  if (selected[0]) {
+  if (selected[0] && options.persistHistory !== false) {
     const record: PushRecord = {
       id: `${Date.now()}`,
       date: getLocalDateKey(new Date(), config.app.timezone),

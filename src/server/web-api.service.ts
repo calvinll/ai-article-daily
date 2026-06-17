@@ -17,7 +17,14 @@ export class WebApiService {
       this.articleRepository.getAll(),
       this.historyRepository.getAll(),
     ]);
-    return buildTodayArticle(articles.find((article) => article.status === 'active' && !history.some((record) => record.articleId === article.id)) ?? articles[0]);
+    const { selectDailyArticles } = await import('../services/selection.service.js');
+    const selected = selectDailyArticles(
+      articles,
+      history,
+      this.config.recommendation.maxDailyRecommendations,
+      this.config.recommendation.daysToAvoidRepeat,
+    );
+    return buildTodayArticle(selected[0] ?? articles[0]);
   }
 
   async getArticles() {

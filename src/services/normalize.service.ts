@@ -41,8 +41,8 @@ function buildWhyRecommended(seed: ArticleSeed): string {
 }
 
 export function normalizeArticles(seeds: ArticleSeed[]): Article[] {
-  return seeds.map((seed, index) => articleSchema.parse({
-    id: `${seed.sourceName.toLowerCase().replace(/\s+/g, '-')}-${index + 1}`,
+  return seeds.map((seed) => articleSchema.parse({
+    id: seed.id,
     title: seed.title,
     summary: seed.summary,
     canonicalUrl: seed.canonicalUrl,

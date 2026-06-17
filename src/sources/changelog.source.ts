@@ -1,4 +1,5 @@
 import { getIsoTimestamp } from '../utils/date.js';
+import { createStableId } from '../utils/hash.js';
 import type { ArticleSeed } from './types.js';
 
 export async function fetchChangelogSource(url: string, sourceName: string): Promise<ArticleSeed[]> {
@@ -14,7 +15,7 @@ export async function fetchChangelogSource(url: string, sourceName: string): Pro
   const markdown = await response.text();
   const matches = markdown.matchAll(/- \[(.*?)\]\((.*?)\)/g);
   const articles = Array.from(matches).slice(0, 10).map((match, index) => ({
-    id: `${sourceName.toLowerCase().replace(/\s+/g, '-')}-${index + 1}`,
+    id: createStableId(match[2] ?? `${url}#${index + 1}`, sourceName.toLowerCase().replace(/\s+/g, '-')),
     title: match[1] ?? `${sourceName} update ${index + 1}`,
     summary: match[1] ?? `${sourceName} update`,
     canonicalUrl: match[2] ?? url,
