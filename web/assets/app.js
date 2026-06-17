@@ -43,7 +43,10 @@ function renderToday(article) {
     <p class="meta">来源：${article.sourceName}</p>
     <p class="lead">${article.summary}</p>
     <p><strong>为什么推荐：</strong>${article.whyRecommended}</p>
-    <p class="link-row"><a href="./article.html?id=${encodeURIComponent(article.id)}">查看详情 →</a></p>
+    <div class="link-stack">
+      <p class="link-row"><a href="./article.html?id=${encodeURIComponent(article.id)}">查看详情 →</a></p>
+      <p class="link-row"><a href="${article.canonicalUrl}" target="_blank" rel="noreferrer">查看原文 →</a></p>
+    </div>
   `;
 }
 
@@ -51,6 +54,7 @@ function renderSpotlight(items, todayId) {
   const el = document.getElementById('spotlight-list');
   const empty = document.getElementById('spotlight-empty');
   if (!el) return;
+
   const spotlight = items
     .filter((item) => item.id !== todayId)
     .filter((item) => item.isOfficial || item.isNoteworthy || item.isRecent)
@@ -60,9 +64,33 @@ function renderSpotlight(items, todayId) {
     <article class="mini-card">
       <h3>${item.title}</h3>
       <p class="meta">${item.sourceName}</p>
-      <p><a href="./article.html?id=${encodeURIComponent(item.id)}">查看详情 →</a></p>
+      <p class="lead">${item.summary}</p>
+      <p class="link-row"><a href="./article.html?id=${encodeURIComponent(item.id)}">查看详情 →</a></p>
     </article>
   `).join('');
+
+  if (empty) empty.hidden = spotlight.length > 0;
+}
+
+function renderSpotlight(items, todayId) {
+  const el = document.getElementById('spotlight-list');
+  const empty = document.getElementById('spotlight-empty');
+  if (!el) return;
+
+  const spotlight = items
+    .filter((item) => item.id !== todayId)
+    .filter((item) => item.isOfficial || item.isNoteworthy || item.isRecent)
+    .slice(0, 4);
+
+  el.innerHTML = spotlight.map((item) => `
+    <article class="mini-card">
+      <h3>${item.title}</h3>
+      <p class="meta">${item.sourceName}</p>
+      <p class="lead">${item.summary}</p>
+      <p class="link-row"><a href="./article.html?id=${encodeURIComponent(item.id)}">查看详情 →</a></p>
+    </article>
+  `).join('');
+
   if (empty) empty.hidden = spotlight.length > 0;
 }
 
@@ -75,12 +103,18 @@ function renderArticleList(items) {
     <article class="card">
       <div class="card-header">
         <h2>${item.title}</h2>
-        <div class="badge-group">${item.themes.map((theme) => badge(theme)).join('')}</div>
+        <div class="badge-group">
+          ${item.themes.map((theme) => badge(theme)).join('')}
+          ${item.isOfficial ? badge('官方来源') : ''}
+          ${item.isNoteworthy ? badge('值得关注') : ''}
+        </div>
       </div>
       <p class="lead">${item.summary}</p>
       <p class="meta">来源：${item.sourceName}</p>
-      <p class="link-row"><a href="./article.html?id=${encodeURIComponent(item.id)}">查看详情 →</a></p>
-      <p class="link-row"><a href="${item.canonicalUrl}" target="_blank" rel="noreferrer">查看原文 →</a></p>
+      <div class="link-stack">
+        <p class="link-row"><a href="./article.html?id=${encodeURIComponent(item.id)}">查看详情 →</a></p>
+        <p class="link-row"><a href="${item.canonicalUrl}" target="_blank" rel="noreferrer">查看原文 →</a></p>
+      </div>
     </article>
   `).join('');
   if (count) count.textContent = `筛选后 ${items.length} 篇文章`;
@@ -102,14 +136,18 @@ function renderHistory(items) {
   const count = document.getElementById('history-result-count');
   const empty = document.getElementById('history-empty');
   if (!el) return;
+
   const groups = groupHistoryByDate(items);
   el.innerHTML = groups.map(([date, entries]) => `
     <section class="archive-group">
-      <div class="section-heading">
-        <span class="eyebrow">Archive</span>
-        <h2>${date}</h2>
+      <div class="section-heading archive-heading">
+        <div>
+          <span class="eyebrow">Archive</span>
+          <h2>${date}</h2>
+        </div>
+        <p class="meta">共 ${entries.length} 条记录</p>
       </div>
-      <div class="list compact-list">
+      <div class="archive-group-list">
         ${entries.map((item) => `
           <article class="card">
             <h3>${item.title}</h3>
@@ -121,6 +159,7 @@ function renderHistory(items) {
       </div>
     </section>
   `).join('');
+
   if (count) count.textContent = `筛选后 ${items.length} 条历史记录`;
   if (empty) empty.hidden = items.length > 0;
 }
