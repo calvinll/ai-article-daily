@@ -11,7 +11,7 @@ describe('scoreArticle', () => {
       canonicalUrl: 'https://example.com/1',
       sourceName: 'OpenAI',
       sourceType: 'rss' as const,
-      publishedAt: undefined,
+      publishedAt: new Date().toISOString(),
       discoveredAt: new Date().toISOString(),
       tags: ['openai'],
       themes: ['model-release'],

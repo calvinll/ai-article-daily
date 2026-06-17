@@ -10,6 +10,7 @@ export type ArticleSeed = {
   tags: string[];
   themes: string[];
   qualitySignals: string[];
+  status: 'active' | 'suppressed';
   isOfficial: boolean;
   isRecent: boolean;
   isNoteworthy: boolean;

@@ -24,6 +24,7 @@ export async function fetchChangelogSource(url: string, sourceName: string): Pro
     tags: ['changelog'],
     themes: ['product-update'],
     qualitySignals: ['changelog'],
+    status: 'active' as const,
     isOfficial: true,
     isRecent: true,
     isNoteworthy: true,

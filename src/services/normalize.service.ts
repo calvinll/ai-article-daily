@@ -58,6 +58,6 @@ export function normalizeArticles(seeds: ArticleSeed[]): Article[] {
     isNoteworthy: seed.isNoteworthy,
     editorScore: buildEditorScore(seed),
     whyRecommended: buildWhyRecommended(seed),
-    status: 'active',
+    status: seed.status,
   }));
 }

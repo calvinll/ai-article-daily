@@ -13,8 +13,11 @@ export class WebApiService {
   }
 
   async getToday() {
-    const articles = await this.articleRepository.getAll();
-    return buildTodayArticle(articles[0]);
+    const [articles, history] = await Promise.all([
+      this.articleRepository.getAll(),
+      this.historyRepository.getAll(),
+    ]);
+    return buildTodayArticle(articles.find((article) => article.status === 'active' && !history.some((record) => record.articleId === article.id)) ?? articles[0]);
   }
 
   async getArticles() {
