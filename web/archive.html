@@ -12,9 +12,9 @@
         <span class="eyebrow">Archive</span>
         <h1>历史归档</h1>
         <p>回看之前推荐过哪些文章，以及它们对应的来源和时间。</p>
-        <nav class="tabs">
+        <nav class="tabs" aria-label="主导航">
           <a href="./index.html">首页</a>
-          <a href="./archive.html">历史归档</a>
+          <a href="./archive.html" aria-current="page">历史归档</a>
         </nav>
       </header>
       <section class="filter-bar">
@@ -32,13 +32,16 @@
           <span>状态</span>
           <select id="history-status-filter">
             <option value="">全部状态</option>
-            <option value="success">success</option>
-            <option value="failed">failed</option>
-            <option value="skipped">skipped</option>
+            <option value="success">已收录</option>
+            <option value="failed">处理失败</option>
+            <option value="skipped">已跳过</option>
           </select>
         </label>
       </section>
-      <div id="history-active-filters" class="badge-group active-filters"></div>
+      <div class="filter-toolbar">
+        <div id="history-active-filters" class="badge-group active-filters"></div>
+        <button id="history-reset-filters" type="button" class="ghost-button" hidden>清空筛选</button>
+      </div>
       <p id="history-result-count" class="meta"></p>
       <section id="history-list" class="archive-groups"></section>
       <p id="history-empty" class="empty-state" hidden>没有找到符合条件的历史记录。</p>

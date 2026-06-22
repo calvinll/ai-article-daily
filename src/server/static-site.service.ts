@@ -2,6 +2,7 @@ import { copyFile, mkdir, readdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path';
 
 import type { AppConfig } from '../types/app-config.js';
+import { buildArticleDetails } from './view-models.js';
 import { WebApiService } from './web-api.service.js';
 
 async function ensureDir(dirPath: string): Promise<void> {
@@ -38,10 +39,15 @@ export async function buildStaticSite(config: AppConfig): Promise<string> {
     api.getHistory(),
   ]);
 
+  const articleDetails = buildArticleDetails(await api.getRawArticles()).map((detail) => ({
+    id: detail.id,
+    detail,
+  }));
+
   await writeFile(path.join(dataDir, 'today.json'), `${JSON.stringify(today, null, 2)}\n`, 'utf8');
   await writeFile(path.join(dataDir, 'articles.json'), `${JSON.stringify(articles, null, 2)}\n`, 'utf8');
   await writeFile(path.join(dataDir, 'history.json'), `${JSON.stringify(history, null, 2)}\n`, 'utf8');
-  await writeFile(path.join(dataDir, 'article-details.json'), `${JSON.stringify(await Promise.all(articles.map(async (article) => ({ id: article.id, detail: await api.getArticleDetail(article.id) }))), null, 2)}\n`, 'utf8');
+  await writeFile(path.join(dataDir, 'article-details.json'), `${JSON.stringify(articleDetails, null, 2)}\n`, 'utf8');
 
   for (const page of ['index.html', 'archive.html', 'article.html']) {
     const html = await readFile(path.join(webDir, page), 'utf8');

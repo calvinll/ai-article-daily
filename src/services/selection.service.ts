@@ -17,7 +17,7 @@ export function selectDailyArticles(articles: Article[], history: PushRecord[], 
     remaining.sort((left, right) => {
       const leftPenalty = selected.filter((article) => article.sourceName === left.sourceName).length * SAME_SOURCE_PENALTY;
       const rightPenalty = selected.filter((article) => article.sourceName === right.sourceName).length * SAME_SOURCE_PENALTY;
-      return (scoreArticle(right, history) - rightPenalty) - (scoreArticle(left, history) - leftPenalty);
+      return (scoreArticle(right, history, daysToAvoidRepeat) - rightPenalty) - (scoreArticle(left, history, daysToAvoidRepeat) - leftPenalty);
     });
 
     const next = remaining.shift();

@@ -6,9 +6,11 @@ export type TodayArticleViewModel = {
   title: string;
   summary: string;
   sourceName: string;
+  sourceType: Article['sourceType'];
   themes: string[];
   canonicalUrl: string;
   whyRecommended: string;
+  publishedAt: Article['publishedAt'];
   isOfficial: boolean;
   isRecent: boolean;
   isNoteworthy: boolean;
@@ -24,6 +26,7 @@ export type ArticleSummaryViewModel = {
   sourceType: Article['sourceType'];
   canonicalUrl: string;
   whyRecommended: string;
+  publishedAt: Article['publishedAt'];
   isOfficial: boolean;
   isRecent: boolean;
   isNoteworthy: boolean;
@@ -50,6 +53,7 @@ export type HistoryItemViewModel = {
   articleId: string;
   title: string;
   sourceName: string;
+  sourceType: Article['sourceType'] | 'unknown';
   status: PushRecord['status'];
   themes: string[];
 };
@@ -61,9 +65,11 @@ export function buildTodayArticle(article: Article | undefined): TodayArticleVie
     title: article.title,
     summary: article.summary,
     sourceName: article.sourceName,
+    sourceType: article.sourceType,
     themes: article.themes,
     canonicalUrl: article.canonicalUrl,
     whyRecommended: article.whyRecommended,
+    publishedAt: article.publishedAt,
     isOfficial: article.isOfficial,
     isRecent: article.isRecent,
     isNoteworthy: article.isNoteworthy,
@@ -81,6 +87,7 @@ export function buildArticleSummaries(articles: Article[]): ArticleSummaryViewMo
     sourceType: article.sourceType,
     canonicalUrl: article.canonicalUrl,
     whyRecommended: article.whyRecommended,
+    publishedAt: article.publishedAt,
     isOfficial: article.isOfficial,
     isRecent: article.isRecent,
     isNoteworthy: article.isNoteworthy,
@@ -112,6 +119,7 @@ export function buildHistoryItems(records: PushRecord[], articles: Article[] = [
     articleId: record.articleId,
     title: record.title,
     sourceName: record.sourceName,
+    sourceType: articleMap.get(record.articleId)?.sourceType ?? 'unknown',
     status: record.status,
     themes: articleMap.get(record.articleId)?.themes ?? [],
   }));

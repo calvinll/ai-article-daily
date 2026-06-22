@@ -16,5 +16,8 @@ export type AppConfig = {
     openaiRss: string;
     huggingFaceRss: string;
     googleAiRss: string;
+    openaiChangelog?: string;
+    anthropicReleaseNotes?: string;
+    vercelAiSdkChangelog?: string;
   };
 };

@@ -12,6 +12,10 @@ export class WebApiService {
     this.historyRepository = new HistoryRepository(config.app.dataDir);
   }
 
+  async getRawArticles() {
+    return this.articleRepository.getAll();
+  }
+
   async getToday() {
     const [articles, history] = await Promise.all([
       this.articleRepository.getAll(),
@@ -33,8 +37,7 @@ export class WebApiService {
   }
 
   async getArticleDetail(id: string) {
-    const articles = await this.articleRepository.getAll();
-    const details = buildArticleDetails(articles);
+    const details = buildArticleDetails(await this.articleRepository.getAll());
     return details.find((article) => article.id === id) ?? null;
   }
 

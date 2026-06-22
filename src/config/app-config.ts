@@ -22,6 +22,9 @@ export function createAppConfig(env: EnvConfig, cwd: string = process.cwd()): Ap
       openaiRss: env.ARTICLE_SOURCE_OPENAI_RSS,
       huggingFaceRss: env.ARTICLE_SOURCE_HF_RSS,
       googleAiRss: env.ARTICLE_SOURCE_GOOGLE_AI_RSS,
+      openaiChangelog: env.ARTICLE_SOURCE_OPENAI_CHANGELOG,
+      anthropicReleaseNotes: env.ARTICLE_SOURCE_ANTHROPIC_RELEASE_NOTES,
+      vercelAiSdkChangelog: env.ARTICLE_SOURCE_VERCEL_AI_SDK_CHANGELOG,
     },
   };
 }

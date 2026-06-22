@@ -13,7 +13,7 @@ async function main(): Promise<void> {
   const config = createAppConfig(env);
   const program = new Command();
 
-  program.name('ai-article-daily').description('Daily AI article curation and push project');
+  program.name('ai-article-daily').description('Daily AI article curation and public web showcase');
 
   program.command('preview').action(async () => previewCommand(config));
   program.command('validate').action(async () => validateCommand(config));

@@ -15,10 +15,10 @@ function getRecencyBoost(article: Article): number {
   return 0;
 }
 
-function getRepeatPenalty(article: Article, history: PushRecord[]): number {
+function getRepeatPenalty(article: Article, history: PushRecord[], daysToAvoidRepeat: number): number {
   const exactRepeat = history.some((record) => record.articleId === article.id);
   const recentSourceCount = history.filter(
-    (record) => record.sourceName === article.sourceName && isWithinDays(record.createdAt, new Date(), 7),
+    (record) => record.sourceName === article.sourceName && isWithinDays(record.createdAt, new Date(), daysToAvoidRepeat),
   ).length;
   return (exactRepeat ? 24 : 0) + recentSourceCount * 5;
 }
@@ -30,7 +30,7 @@ function getSourceWeight(sourceName: string): number {
   return 0;
 }
 
-export function scoreArticle(article: Article, history: PushRecord[]): number {
+export function scoreArticle(article: Article, history: PushRecord[], daysToAvoidRepeat = 7): number {
   const base = article.editorScore;
   const officialBoost = article.isOfficial ? 8 : 0;
   const recencyBoost = getRecencyBoost(article);
@@ -42,6 +42,6 @@ export function scoreArticle(article: Article, history: PushRecord[]): number {
   const launchBoost = article.qualitySignals.includes('launch') ? 4 : 0;
   const industryPenalty = article.themes.includes('industry') ? -10 : 0;
   const sourceWeight = getSourceWeight(article.sourceName);
-  const repeatedPenalty = getRepeatPenalty(article, history);
+  const repeatedPenalty = getRepeatPenalty(article, history, daysToAvoidRepeat);
   return base + officialBoost + recencyBoost + noteworthyBoost + modelBoost + developerBoost + researchBoost + productBoost + launchBoost + sourceWeight + industryPenalty - repeatedPenalty;
 }

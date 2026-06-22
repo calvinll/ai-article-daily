@@ -9,17 +9,17 @@
   <body>
     <main class="container">
       <header class="hero">
-        <div class="breadcrumbs">
-          <a href="./index.html">首页</a>
-          <span>→</span>
-          <a href="./archive.html">历史归档</a>
-          <span>→</span>
-          <span>文章详情</span>
-        </div>
+        <nav class="breadcrumbs" aria-label="面包屑导航">
+          <ol class="breadcrumbs-list">
+            <li><a href="./index.html">首页</a></li>
+            <li><a href="./archive.html">历史归档</a></li>
+            <li><span aria-current="page">文章详情</span></li>
+          </ol>
+        </nav>
         <span class="eyebrow">Article Detail</span>
         <h1>文章详情</h1>
         <p>查看这篇文章为什么值得读，以及它来自哪里。</p>
-        <nav class="tabs">
+        <nav class="tabs" aria-label="主导航">
           <a href="./index.html">首页</a>
           <a href="./archive.html">历史归档</a>
         </nav>

@@ -32,6 +32,6 @@ describe('scoreArticle', () => {
       isNoteworthy: false,
     };
 
-    expect(scoreArticle(official, [])).toBeGreaterThan(scoreArticle(normal, []));
+    expect(scoreArticle(official, [], 7)).toBeGreaterThan(scoreArticle(normal, [], 7));
   });
 });

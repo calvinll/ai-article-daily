@@ -12,8 +12,8 @@
         <span class="eyebrow">AI Article Daily</span>
         <h1>每天挑出最值得看的 AI 内容</h1>
         <p>聚合高质量官方来源，筛掉价值不高的内容，把值得读的 AI 文章整理成一份可浏览的每日精选。</p>
-        <nav class="tabs">
-          <a href="./index.html">首页</a>
+        <nav class="tabs" aria-label="主导航">
+          <a href="./index.html" aria-current="page">首页</a>
           <a href="./archive.html">历史归档</a>
         </nav>
       </header>
@@ -53,7 +53,10 @@
             </select>
           </label>
         </section>
-        <div id="article-active-filters" class="badge-group active-filters"></div>
+        <div class="filter-toolbar">
+          <div id="article-active-filters" class="badge-group active-filters"></div>
+          <button id="article-reset-filters" type="button" class="ghost-button" hidden>清空筛选</button>
+        </div>
         <p id="article-result-count" class="meta"></p>
         <div id="article-list" class="list"></div>
         <p id="article-empty" class="empty-state" hidden>没有找到符合条件的文章。</p>

@@ -44,9 +44,9 @@ export async function runDailyArticleFlow(config: AppConfig, options: { persistH
   return {
     selected,
     content,
-    pushResult: {
+    publishResult: {
       success: true,
-      detail: { message: 'Web-first flow completed without Feishu delivery.' },
+      detail: { message: 'Web-first curation flow completed successfully.' },
     },
   };
 }

@@ -17,6 +17,9 @@ export const envSchema = z.object({
   ARTICLE_SOURCE_OPENAI_RSS: z.string().url(),
   ARTICLE_SOURCE_HF_RSS: z.string().url(),
   ARTICLE_SOURCE_GOOGLE_AI_RSS: z.string().url(),
+  ARTICLE_SOURCE_OPENAI_CHANGELOG: optionalNonEmptyString,
+  ARTICLE_SOURCE_ANTHROPIC_RELEASE_NOTES: optionalNonEmptyString,
+  ARTICLE_SOURCE_VERCEL_AI_SDK_CHANGELOG: optionalNonEmptyString,
 });
 
 export type EnvConfig = z.infer<typeof envSchema>;
